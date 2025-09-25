@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🕊 Talanton - نظام حضور خدام ملايكة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --info: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --text-light: #212529;
+            --text-dark: #e9ecef;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-gradient: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.15);
+            --radius: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --primary: #4895ef;
+            --primary-dark: #4361ee;
+            --secondary: #b5179e;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --info: #4895ef;
+            --light: #121212;
+            --dark: #1e1e2e;
+            --text-light: #212529;
+            --text-dark: #e9ecef;
+            --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --card-gradient: linear-gradient(135deg, #2d2d44 0%, #1e1e2e 100%);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-dark);
+            min-height: 100vh;
+            transition: var(--transition);
+            line-height: 1.6;
+        }
+
+        .light-mode {
+            color: var(--text-light);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--bg-gradient);
+            color: white;
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1;
+        }
+
+        header > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .nav-tab {
+            background: var(--card-gradient);
+            border: none;
+            padding: 15px 25px;
+            border-radius: var(--radius);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 2px solid transparent;
+        }
+
+        .dark-mode .nav-tab {
+            color: var(--text-dark);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-tab:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary);
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: var(--card-gradient);
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
+
+        .dark-mode .card {
+            color: var(--text-dark);
+            border: 2px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .card-header {
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .dark-mode .form-label {
+            color: var(--text-dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--text-light);
+        }
+
+        .dark-mode .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--text-dark);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3);
+        }
+
+        select.form-control option {
+            background: white;
+            color: var(--text-light);
+            padding: 10px;
+        }
+
+        .dark-mode select.form-control option {
+            background: #2d2d44;
+            color: var(--text-dark);
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn-success { background: var(--success); }
+        .btn-danger { background: var(--danger); }
+        .btn-warning { background: var(--warning); }
+        .btn-info { background: var(--info); }
+
+        .w-100 { width: 100%; }
+        .flex-1 { flex: 1; }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--card-gradient);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            font-size: 1.3rem;
+            color: var(--text-light);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dark-mode .theme-toggle {
+            color: var(--text-dark);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--card-gradient);
+            border-radius: var(--radius);
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-hover);
+            color: var(--text-light);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dark-mode .modal-content {
+            color: var(--text-dark);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .modal-header {
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--danger);
+        }
+
+        .store-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .product-card {
+            background: var(--card-gradient);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+            color: var(--text-light);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dark-mode .product-card {
+            color: var(--text-dark);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .product-image {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--warning);
+            margin: 10px 0;
+        }
+
+        .text-center { text-align: center; }
+        .mb-3 { margin-bottom: 1rem; }
+        .mt-3 { margin-top: 1rem; }
+        .d-flex { display: flex; }
+        .gap-2 { gap: 0.5rem; }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: 600;
+        }
+
+        .alert-success {
+            background: rgba(76, 201, 240, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .alert-danger {
+            background: rgba(247, 37, 133, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            color: var(--text-light);
+        }
+
+        .dark-mode .table {
+            color: var(--text-dark);
+        }
+
+        .table th, .table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .dark-mode .table th, .dark-mode .table td {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .table th {
+            background: var(--primary);
+            color: white;
+        }
+
+        .table td {
+            background: transparent;
+        }
+
+        .dark-mode .table td {
+            background: transparent;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            .nav-tabs {
+                flex-direction: column;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .logo {
+                font-size: 2.5rem;
+            }
+        }
+
+        p, h1, h2, h3, h4, h5, h6, span, div {
+            color: inherit;
+        }
+
+        .text-muted {
+            opacity: 0.7;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div class="container">
+        <header>
+            <div class="logo">🕊</div>
+            <h1>نظام Talanton</h1>
+            <p class="subtitle">نظام حضور ومكافآت خدام ملايكة</p>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-tab="attendance">
+                <i class="fas fa-calendar-check"></i> تسجيل الحضور
+            </button>
+            <button class="nav-tab" data-tab="store">
+                <i class="fas fa-store"></i> متجر Talanton
+            </button>
+            <button class="nav-tab" data-tab="reports">
+                <i class="fas fa-chart-bar"></i> التقارير والترتيب
+            </button>
+            <button class="nav-tab" id="adminLoginBtn">
+                <i class="fas fa-user-cog"></i> دخول الأدمن
+            </button>
+        </div>
+
+        <div id="mainContent">
+            <!-- تسجيل الحضور -->
+            <div class="tab-content active" id="attendanceTab">
+                <div class="dashboard">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-user-check card-icon"></i> تسجيل الحضور الأسبوعي</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">اختر اسمك</label>
+                            <select class="form-control" id="memberSelect">
+                                <option value="">جاري تحميل الأسماء...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">اختر الأسبوع</label>
+                            <select class="form-control" id="weekSelect">
+                                <option value="">جاري تحميل الأسابيع...</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-success w-100" id="attendanceBtn">
+                            <i class="fas fa-check-circle"></i> تسجيل الحضور
+                        </button>
+                        
+                        <div id="verificationSection" style="display: none; margin-top: 20px;">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">تأكيد الهوية</h4>
+                                </div>
+                                <div class="d-flex gap-2 mb-3">
+                                    <button class="btn btn-info flex-1" id="faceIdBtn">
+                                        <i class="fas fa-user-circle"></i> بصمة الوجه
+                                    </button>
+                                    <button class="btn btn-info flex-1" id="fingerprintBtn">
+                                        <i class="fas fa-fingerprint"></i> بصمة الإصبع
+                                    </button>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">كلمة المرور (اختياري)</label>
+                                    <input type="password" class="form-control" id="memberPassword" placeholder="أدخل كلمة المرور">
+                                </div>
+                                <button class="btn btn-success w-100" id="confirmAttendanceBtn">
+                                    <i class="fas fa-check-double"></i> تأكيد التسجيل
+                                </button>
+                                <div id="verificationStatus" class="mt-3"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-coins card-icon"></i> رصيد Talanton</h3>
+                        </div>
+                        <div class="text-center">
+                            <div class="mb-3" style="font-size: 3rem; color: var(--warning);">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <h2 id="talantonBalance">0</h2>
+                            <p class="text-muted">نقاط Talanton المتاحة</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-chart-line card-icon"></i> إحصائيات الحضور</h3>
+                        </div>
+                        <div id="attendanceStats">
+                            <p>جاري تحميل الإحصائيات...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- متجر Talanton -->
+            <div class="tab-content" id="storeTab">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-store card-icon"></i> متجر Talanton</h3>
+                    </div>
+                    <div id="storeContent">
+                        <p>جاري تحميل المنتجات...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- التقارير -->
+            <div class="tab-content" id="reportsTab">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-chart-bar card-icon"></i> التقارير والترتيب</h3>
+                    </div>
+                    <div id="reportsContent">
+                        <p>جاري تحميل التقارير...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal دخول الأدمن -->
+    <div class="modal" id="adminLoginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="card-title"><i class="fas fa-user-cog"></i> دخول الأدمن</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">كلمة مرور الأدمن</label>
+                <input type="password" class="form-control" id="adminPassword" placeholder="أدخل كلمة المرور">
+            </div>
+            <button class="btn btn-primary w-100" id="confirmAdminLogin">
+                <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+            </button>
+            <div id="adminLoginStatus" class="mt-3 text-center"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        // استيراد Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getDatabase, ref, set, get, update, remove, push } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBCQIqdCsxSvhfYOs00AetoVWpFhj4XNAQ",
+            authDomain: "angels-attendance.firebaseapp.com",
+            databaseURL: "https://angels-attendance-default-rtdb.firebaseio.com",
+            projectId: "angels-attendance",
+            storageBucket: "angels-attendance.firebasestorage.app",
+            messagingSenderId: "157249026489",
+            appId: "1:157249026489:web:db2b420203bd81d9a19e68"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // عناصر DOM
+        const themeToggle = document.getElementById('themeToggle');
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const memberSelect = document.getElementById('memberSelect');
+        const weekSelect = document.getElementById('weekSelect');
+        const attendanceBtn = document.getElementById('attendanceBtn');
+        const verificationSection = document.getElementById('verificationSection');
+        const faceIdBtn = document.getElementById('faceIdBtn');
+        const fingerprintBtn = document.getElementById('fingerprintBtn');
+        const confirmAttendanceBtn = document.getElementById('confirmAttendanceBtn');
+        const verificationStatus = document.getElementById('verificationStatus');
+        const talantonBalance = document.getElementById('talantonBalance');
+        const adminLoginBtn = document.getElementById('adminLoginBtn');
+        const adminLoginModal = document.getElementById('adminLoginModal');
+        const confirmAdminLogin = document.getElementById('confirmAdminLogin');
+        const adminLoginStatus = document.getElementById('adminLoginStatus');
+
+        // متغيرات حالة
+        let currentMemberId = '';
+        let currentWeek = '';
+        let fingerprintVerified = false;
+        let faceIdVerified = false;
+
+        // تبديل الوضع الداكن/الفاتح
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            document.body.classList.toggle('light-mode');
+            themeToggle.innerHTML = document.body.classList.contains('dark-mode') ? 
+                '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+        });
+
+        // التنقل بين التبويبات
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                if (tab.id === 'adminLoginBtn') {
+                    adminLoginModal.classList.add('show');
+                    return;
+                }
+
+                navTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === tabId + 'Tab') {
+                        content.classList.add('active');
+                        loadTabContent(tabId);
+                    }
+                });
+            });
+        });
+
+        // تحميل الأعضاء من Firebase
+        async function loadMembers() {
+            try {
+                memberSelect.innerHTML = '<option value="">جاري تحميل الأسماء...</option>';
+                const snapshot = await get(ref(db, 'members'));
+                
+                if (snapshot.exists()) {
+                    const members = Object.entries(snapshot.val())
+                        .sort((a, b) => a[1].name.localeCompare(b[1].name, 'ar'));
+                    
+                    memberSelect.innerHTML = '<option value="">اختار اسمك</option>';
+                    
+                    members.forEach(([id, member], index) => {
+                        const option = document.createElement('option');
+                        option.value = id;
+                        const emoji = member.gender === 'male' ? '👦' : '👧';
+                        option.textContent = `${index + 1} - ${member.name} ${emoji}`;
+                        memberSelect.appendChild(option);
+                    });
+                } else {
+                    memberSelect.innerHTML = '<option value="">لا يوجد أعضاء مسجلين</option>';
+                }
+            } catch (error) {
+                console.error('Error loading members:', error);
+                memberSelect.innerHTML = '<option value="">خطأ في تحميل البيانات</option>';
+            }
+        }
+
+        // تحميل الأسابيع
+        function loadWeeks() {
+            weekSelect.innerHTML = '<option value="">اختر الأسبوع</option>';
+            const currentWeekNumber = getCurrentWeek();
+            
+            for (let i = 1; i <= 52; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `الأسبوع ${i}`;
+                if (i === currentWeekNumber) {
+                    option.selected = true;
+                }
+                weekSelect.appendChild(option);
+            }
+        }
+
+        // الحصول على رقم الأسبوع الحالي
+        function getCurrentWeek() {
+            const now = new Date();
+            const start = new Date(now.getFullYear(), 0, 1);
+            const diff = now - start;
+            const oneWeek = 1000 * 60 * 60 * 24 * 7;
+            return Math.floor(diff / oneWeek) + 1;
+        }
+
+        // تحميل رصيد Talanton
+        async function loadTalantonBalance(memberId = null) {
+            try {
+                if (!memberId) {
+                    talantonBalance.textContent = '0';
+                    return;
+                }
+                
+                const snapshot = await get(ref(db, `talanton/${memberId}`));
+                const balance = snapshot.exists() ? snapshot.val().balance : 0;
+                talantonBalance.textContent = balance;
+            } catch (error) {
+                console.error('Error loading balance:', error);
+                talantonBalance.textContent = '0';
+            }
+        }
+
+        // تحميل محتوى التبويب
+        async function loadTabContent(tabId) {
+            if (tabId === 'store') {
+                await loadStore();
+            } else if (tabId === 'reports') {
+                await loadReports();
+            }
+        }
+
+        // تحميل المتجر
+        async function loadStore() {
+            const storeContent = document.getElementById('storeContent');
+            storeContent.innerHTML = '<p>جاري تحميل المنتجات...</p>';
+            
+            try {
+                const snapshot = await get(ref(db, 'store/products'));
+                if (snapshot.exists()) {
+                    const products = snapshot.val();
+                    storeContent.innerHTML = `
+                        <div class="store-grid">
+                            ${Object.entries(products).map(([id, product]) => `
+                                <div class="product-card">
+                                    <div class="product-image">
+                                        <i class="fas ${product.icon || 'fa-gift'}"></i>
+                                    </div>
+                                    <h4>${product.name}</h4>
+                                    <p>${product.description}</p>
+                                    <div class="product-price">${product.price} Talanton</div>
+                                    <button class="btn btn-warning w-100" onclick="window.purchaseProduct('${id}')">
+                                        <i class="fas fa-shopping-cart"></i> شراء
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                } else {
+                    storeContent.innerHTML = '<p>لا توجد منتجات متاحة حالياً</p>';
+                }
+            } catch (error) {
+                console.error('Error loading store:', error);
+                storeContent.innerHTML = '<p>خطأ في تحميل المتجر</p>';
+            }
+        }
+
+        // شراء منتج
+        window.purchaseProduct = async function(productId) {
+            if (!currentMemberId) {
+                alert('يرجى اختيار عضو أولاً من تبويب تسجيل الحضور');
+                return;
+            }
+
+            try {
+                const productSnapshot = await get(ref(db, `store/products/${productId}`));
+                const memberSnapshot = await get(ref(db, `talanton/${currentMemberId}`));
+                
+                if (!productSnapshot.exists()) {
+                    alert('المنتج غير موجود');
+                    return;
+                }
+
+                const product = productSnapshot.val();
+                const balance = memberSnapshot.exists() ? memberSnapshot.val().balance : 0;
+
+                if (balance < product.price) {
+                    alert('رصيدك غير كافي لشراء هذا المنتج');
+                    return;
+                }
+
+                if (confirm(`هل تريد شراء ${product.name} بسعر ${product.price} Talanton؟`)) {
+                    const newBalance = balance - product.price;
+                    
+                    // تحديث الرصيد
+                    await set(ref(db, `talanton/${currentMemberId}`), {
+                        balance: newBalance
+                    });
+
+                    // تسجيل عملية الشراء
+                    const purchaseData = {
+                        productId: productId,
+                        productName: product.name,
+                        price: product.price,
+                        memberId: currentMemberId,
+                        timestamp: Date.now()
+                    };
+
+                    await push(ref(db, 'purchases'), purchaseData);
+                    
+                    alert(`تم شراء ${product.name} بنجاح!`);
+                    loadTalantonBalance(currentMemberId);
+                    loadStore();
+                }
+            } catch (error) {
+                console.error('Error purchasing product:', error);
+                alert('حدث خطأ أثناء عملية الشراء');
+            }
+        };
+
+        // تحميل التقارير
+        async function loadReports() {
+            const reportsContent = document.getElementById('reportsContent');
+            reportsContent.innerHTML = '<p>جاري تحميل التقارير...</p>';
+            
+            try {
+                const membersSnapshot = await get(ref(db, 'members'));
+                const attendanceSnapshot = await get(ref(db, 'attendance'));
+                const talantonSnapshot = await get(ref(db, 'talanton'));
+                
+                if (membersSnapshot.exists()) {
+                    let reportsHTML = '<h4>ترتيب الأعضاء حسب الحضور</h4>';
+                    
+                    const members = Object.entries(membersSnapshot.val()).map(([id, member]) => {
+                        let attendanceCount = 0;
+                        let balance = 0;
+
+                        if (attendanceSnapshot.exists()) {
+                            Object.values(attendanceSnapshot.val()).forEach(week => {
+                                if (week && week[id]) attendanceCount++;
+                            });
+                        }
+
+                        if (talantonSnapshot.exists() && talantonSnapshot.val()[id]) {
+                            balance = talantonSnapshot.val()[id].balance;
+                        }
+
+                        return {
+                            id,
+                            name: member.name,
+                            attendanceCount,
+                            balance
+                        };
+                    });
+
+                    // ترتيب حسب الحضور
+                    members.sort((a, b) => b.attendanceCount - a.attendanceCount);
+
+                    reportsHTML += `
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>الترتيب</th>
+                                        <th>الاسم</th>
+                                        <th>عدد الحضور</th>
+                                        <th>رصيد Talanton</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${members.map((member, index) => `
+                                        <tr>
+                                            <td>${index + 1}</td>
+                                            <td>${member.name}</td>
+                                            <td>${member.attendanceCount}</td>
+                                            <td>${member.balance}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+
+                    reportsContent.innerHTML = reportsHTML;
+                } else {
+                    reportsContent.innerHTML = '<p>لا توجد بيانات لعرضها</p>';
+                }
+            } catch (error) {
+                console.error('Error loading reports:', error);
+                reportsContent.innerHTML = '<p>خطأ في تحميل التقارير</p>';
+            }
+        }
+
+        // تسجيل الحضور
+        attendanceBtn.addEventListener('click', () => {
+            currentMemberId = memberSelect.value;
+            currentWeek = weekSelect.value;
+            
+            if (!currentMemberId || !currentWeek) {
+                alert('يرجى اختيار الاسم والأسبوع');
+                return;
+            }
+
+            verificationSection.style.display = 'block';
+            fingerprintVerified = false;
+            faceIdVerified = false;
+            verificationStatus.innerHTML = '';
+        });
+
+        // محاكاة بصمة الوجه
+        faceIdBtn.addEventListener('click', () => {
+            faceIdVerified = true;
+            verificationStatus.innerHTML = '<div class="alert alert-success">تم التحقق ببصمة الوجه بنجاح</div>';
+        });
+
+        // محاكاة بصمة الإصبع
+        fingerprintBtn.addEventListener('click', () => {
+            fingerprintVerified = true;
+            verificationStatus.innerHTML = '<div class="alert alert-success">تم التحقق ببصمة الإصبع بنجاح</div>';
+        });
+
+        // تأكيد التسجيل
+        confirmAttendanceBtn.addEventListener('click', async () => {
+            if (!faceIdVerified && !fingerprintVerified) {
+                verificationStatus.innerHTML = '<div class="alert alert-danger">يرجى التحقق بالبصمة أولاً</div>';
+                return;
+            }
+
+            try {
+                // التحقق من عدم التسجيل المسبق
+                const attendanceRef = ref(db, `attendance/week${currentWeek}/${currentMemberId}`);
+                const existingAttendance = await get(attendanceRef);
+
+                if (existingAttendance.exists()) {
+                    verificationStatus.innerHTML = '<div class="alert alert-danger">لقد سجلت حضورك لهذا الأسبوع مسبقاً</div>';
+                    return;
+                }
+
+                // تسجيل الحضور
+                await set(attendanceRef, {
+                    attended: true,
+                    timestamp: Date.now(),
+                    verification: {
+                        faceId: faceIdVerified,
+                        fingerprint: fingerprintVerified
+                    }
+                });
+
+                // تحديث رصيد Talanton
+                const talantonRef = ref(db, `talanton/${currentMemberId}`);
+                const currentBalanceSnapshot = await get(talantonRef);
+                const currentBalance = currentBalanceSnapshot.exists() ? currentBalanceSnapshot.val().balance : 0;
+                const newBalance = currentBalance + 1;
+
+                await set(talantonRef, {
+                    balance: newBalance
+                });
+
+                verificationStatus.innerHTML = '<div class="alert alert-success">تم تسجيل الحضور بنجاح! +1 Talanton</div>';
+                loadTalantonBalance(currentMemberId);
+                
+                // إخفاء قسم التحقق بعد 3 ثواني
+                setTimeout(() => {
+                    verificationSection.style.display = 'none';
+                    verificationStatus.innerHTML = '';
+                }, 3000);
+
+            } catch (error) {
+                console.error('Error recording attendance:', error);
+                verificationStatus.innerHTML = '<div class="alert alert-danger">حدث خطأ أثناء التسجيل</div>';
+            }
+        });
+        // في صفحة index.html - بدل كود دخول الأدمن السابق
+confirmAdminLogin.addEventListener('click', () => {
+    const password = document.getElementById('adminPassword').value;
+    if (password === 'admin123') {
+        sessionStorage.setItem('adminLoggedIn', 'true');
+        window.location.href = 'admin.html';
+    } else {
+        adminLoginStatus.innerHTML = '<div class="alert alert-danger">كلمة المرور خاطئة</div>';
+    }
+});
+        // إغلاق المودال
+        document.querySelector('.close-modal').addEventListener('click', () => {
+            adminLoginModal.classList.remove('show');
+        });
+
+        // التحميل الأولي
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMembers();
+            loadWeeks();
+        });
+
+        // تحديث الرصيد عند تغيير العضو
+        memberSelect.addEventListener('change', (e) => {
+            currentMemberId = e.target.value;
+            loadTalantonBalance(currentMemberId);
+        });
+    </script>
+</body>
+</html>
